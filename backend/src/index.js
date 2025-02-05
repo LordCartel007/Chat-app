@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import bodyParser from "body-parser";
 
 import path from "path";
 
@@ -24,6 +25,13 @@ app.use(
     credentials: true,
   })
 );
+
+app.use(express.json({ limit: "10mb" })); // Increase request size limit for our images sending on cloudinary
+app.use(express.urlencoded({ limit: "10mb", extended: true })); // Increase URL-encoded body size
+
+// Increase the limit for JSON request bodies
+app.use(bodyParser.json({ limit: "50mb" })); // Set the limit to 50MB
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true })); // For handling urlencoded data
 
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);

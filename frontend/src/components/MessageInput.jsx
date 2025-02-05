@@ -8,23 +8,27 @@ const MessageInput = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const fileInputRef = useRef(null);
   const { sendMessage } = useChatStore();
-
+  const [fullscreenImage, setFullscreenImage] = useState(null);
+  const [loading, setLoading] = useState(false); // Loading state
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (!file.type.startsWith("image/")) {
       toast.error("Please select an image file");
       return;
     }
-
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setImagePreview(reader.result);
-    };
-    reader.readAsDataURL(file);
+    // Simulate an image upload delay (replace with actual upload logic)
+    setTimeout(() => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }, 2000); // Simulated delay of 2 seconds
   };
 
   const removeImage = () => {
     setImagePreview(null);
+    setLoading(false); // Stop loading if removing
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
@@ -33,6 +37,7 @@ const MessageInput = () => {
     if (!text.trim() && !imagePreview) return;
 
     try {
+      setLoading(true); // Show loading while sending
       await sendMessage({
         text: text.trim(),
         image: imagePreview,
@@ -44,6 +49,8 @@ const MessageInput = () => {
       if (fileInputRef.current) fileInputRef.current.value = "";
     } catch (error) {
       console.error("Failed to send message:", error);
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
@@ -55,7 +62,8 @@ const MessageInput = () => {
             <img
               src={imagePreview}
               alt="Preview"
-              className="w-20 h-20 object-cover rounded-lg border border-zinc-700"
+              className="w-20 h-20 object-cover rounded-lg border border-zinc-700 cursor-pointer "
+              onClick={() => setFullscreenImage(imagePreview)} // Open full-screen view
             />
             <button
               onClick={removeImage}
@@ -66,6 +74,20 @@ const MessageInput = () => {
               <X className="size-3" />
             </button>
           </div>
+        </div>
+      )}
+
+      {/* Full-Screen Image Modal */}
+      {fullscreenImage && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50"
+          onClick={() => setFullscreenImage(null)}
+        >
+          <img
+            src={fullscreenImage}
+            alt="Full View"
+            className="max-w-full max-h-full rounded-lg shadow-lg "
+          />
         </div>
       )}
 

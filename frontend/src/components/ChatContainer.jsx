@@ -1,5 +1,5 @@
 import { useChatStore } from "../store/useChatStore";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import ChatHeader from "./ChatHeader";
 import MessageInput from "./MessageInput";
@@ -18,6 +18,7 @@ const ChatContainer = () => {
   } = useChatStore();
   const { authUser } = useAuthStore();
   const messageEndRef = useRef(null);
+  const [fullscreenImage, setFullscreenImage] = useState(null); // <-- Fullscreen state
 
   useEffect(() => {
     getMessages(selectedUser._id);
@@ -43,7 +44,7 @@ const ChatContainer = () => {
       <div className="flex-1 flex flex-col overflow-auto">
         <ChatHeader />
         <MessageSkeleton />
-        <MessageInput />
+        <MessageInput setFullscreenImage={setFullscreenImage} />
       </div>
       // ii
     );
@@ -85,6 +86,7 @@ const ChatContainer = () => {
                   src={message.image}
                   alt="Attachment"
                   className="sm:max-w-[200px] rounded-md mb-2"
+                  onClick={() => setFullscreenImage(message.image)} // <-- Open full-screen
                 />
               )}
               {message.text && <p>{message.text}</p>}
@@ -93,7 +95,21 @@ const ChatContainer = () => {
         ))}
       </div>
 
-      <MessageInput />
+      <MessageInput setFullscreenImage={setFullscreenImage} />
+
+      {/* Full-Screen Image Modal */}
+      {fullscreenImage && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50"
+          onClick={() => setFullscreenImage(null)}
+        >
+          <img
+            src={fullscreenImage}
+            alt="Full View"
+            className="max-w-full max-h-full rounded-lg shadow-lg"
+          />
+        </div>
+      )}
     </div>
   );
 };
