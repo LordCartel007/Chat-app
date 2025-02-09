@@ -42,7 +42,8 @@ const ChatContainer = () => {
   if (isMessagesLoading) {
     return (
       <div className="flex-1 flex flex-col overflow-auto">
-        <ChatHeader />
+        <ChatHeader setFullscreenImage={setFullscreenImage} />{" "}
+        {/* Pass as prop */}
         <MessageSkeleton />
         <MessageInput setFullscreenImage={setFullscreenImage} />
       </div>
@@ -52,8 +53,8 @@ const ChatContainer = () => {
 
   return (
     <div className="flex-1 flex flex-col overflow-auto">
-      <ChatHeader />
-
+      <ChatHeader setFullscreenImage={setFullscreenImage} />{" "}
+      {/* Pass as prop */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.map((message) => (
           <div
@@ -94,9 +95,7 @@ const ChatContainer = () => {
           </div>
         ))}
       </div>
-
       <MessageInput setFullscreenImage={setFullscreenImage} />
-
       {/* Full-Screen Image Modal */}
       {fullscreenImage && (
         <div
