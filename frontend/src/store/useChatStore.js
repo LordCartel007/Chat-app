@@ -28,7 +28,7 @@ export const useChatStore = create((set, get) => ({
       const res = await axiosInstance.get("/messages/users");
       // making the admin apper first
       // Define the admin user (by ID or role)
-      const ADMIN_ID = "67a0a98e028dc3636f1d7614"; //  admin user ID
+      const ADMIN_ID = "67c0d36f900b8c1e2f96ed39"; //  admin user ID
 
       // Separate admin from other users
       const adminUser = res.data.find((user) => user._id === ADMIN_ID);
