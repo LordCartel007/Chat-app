@@ -25,16 +25,6 @@ const Navbar = () => {
           </div>
 
           <div className="flex items-center gap-2">
-            <a
-              href="https://main.d3nxl6nh96j6xg.amplifyapp.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn btn-sm gap-2"
-            >
-              <User className="size-5" />
-              <span className="hidden sm:inline">Cartel Ai</span>
-            </a>
-
             <Link
               to={"/settings"}
               className={`
